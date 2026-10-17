@@ -31,7 +31,7 @@ body{font-family:var(--sans);color:var(--texto);background:#fff;line-height:1.65
 img{max-width:100%;height:auto;display:block}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--vinho);outline-offset:3px}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 .wrap{max-width:72rem;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
 h1,h2,h3{font-family:var(--script);font-style:italic;font-weight:700;color:var(--vinho);line-height:1.1}
 h2{font-size:clamp(2.1rem,5vw,3.2rem);margin-bottom:.75rem}
@@ -45,7 +45,13 @@ h2{font-size:clamp(2.1rem,5vw,3.2rem);margin-bottom:.75rem}
 /* Topo */
 .topo{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.96);border-bottom:1px solid #f1e6d2}
 .topo .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-top:.6rem;padding-bottom:.6rem}
-.topo img{height:58px;width:auto}
+.topo img{height:104px;width:auto;transform-origin:50% 88%;transition:height .3s ease,scale .25s ease,rotate .25s ease;animation:logoEntra 1s cubic-bezier(.34,1.56,.64,1) both,logoBalanca 5s ease-in-out 1.4s infinite}
+.topo a:hover img{scale:1.12;rotate:-5deg}
+@keyframes logoEntra{0%{opacity:0;transform:translateY(-70px) rotate(-14deg) scale(.6)}60%{opacity:1}100%{opacity:1;transform:none}}
+@keyframes logoBalanca{0%,100%{transform:rotate(0) translateY(0)}25%{transform:rotate(-3.5deg) translateY(-4px)}50%{transform:rotate(0) translateY(0)}75%{transform:rotate(3.5deg) translateY(-4px)}}
+.topo.sombra img{height:68px}
+html{scroll-padding-top:90px}
+@media (max-width:820px){.topo img{height:84px}.topo.sombra img{height:60px}}
 .topo nav{display:flex;align-items:center;gap:1.6rem;font-weight:500;font-size:.95rem}
 .topo nav a{text-decoration:none}
 .topo nav a:hover{color:var(--azul-escuro)}
@@ -91,7 +97,7 @@ section{padding:clamp(3rem,7vw,5.5rem) 0}
 .passos li::before{content:counter(p) ".";font-family:var(--script);font-style:italic;font-weight:700;font-size:2rem;color:var(--vinho);display:block;line-height:1.2}
 
 footer{background:var(--ouro-claro);padding:2.25rem 0;text-align:center;font-size:.95rem}
-footer img{height:84px;width:auto;margin:0 auto .75rem}
+footer img{height:140px;width:auto;margin:0 auto .75rem;transform-origin:50% 88%;animation:logoBalanca 6s ease-in-out infinite}
 
 /* Dinâmico */
 .rv{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}
@@ -128,12 +134,45 @@ a.wa:hover svg{animation:balanca .7s ease-in-out}
 .fab.wa:hover{transform:scale(1.1)}
 .fab.wa{width:62px;height:62px;padding:0;gap:0;justify-content:center;border-radius:50%}
 .fab.wa svg{width:34px;height:34px}
+
+/* Topo animado */
+.hero h1 .pal{display:inline-block;opacity:0;transform:translateY(.6em) rotate(-4deg);animation:palavra .75s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i) * 120ms + 200ms)}
+@keyframes palavra{to{opacity:1;transform:none}}
+.hero p,.hero .acoes{opacity:0;animation:sobe .7s ease forwards}
+.hero p{animation-delay:1s}
+.hero .acoes{animation-delay:1.2s}
+@keyframes sobe{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.hero .acoes .botao:first-child{animation:salta 3.4s ease-in-out 2.6s infinite}
+@keyframes salta{0%,86%,100%{transform:none}91%{transform:translateY(-7px)}96%{transform:translateY(0)}}
+.vitrine .sol{animation:respira 5s ease-in-out infinite}
+@keyframes respira{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+.vitrine::before{content:"";position:absolute;inset:-6%;border-radius:50%;border:3px dashed rgba(91,26,46,.55);animation:gira 22s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.vitrine .principal img,.vitrine .mini img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.14);transition:opacity 1s ease,transform 1.4s ease}
+.vitrine .principal img.on,.vitrine .mini img.on{opacity:1;transform:none}
+/* Topo: interação */
+.hero{position:relative}
+.hero .wrap{position:relative;z-index:1}
+.granulado{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.granulado i{position:absolute;top:-6%;width:6px;height:17px;border-radius:4px;opacity:.9;animation:cai linear infinite}
+@keyframes cai{from{top:-6%;transform:rotate(0)}to{top:104%;transform:rotate(540deg)}}
+.vitrine .sol{translate:calc(var(--mx,0) * -18px) calc(var(--my,0) * -18px);transition:translate .4s ease-out}
+.vitrine .principal{cursor:pointer;translate:calc(var(--mx,0) * 12px) calc(var(--my,0) * 12px);transition:translate .4s ease-out}
+.vitrine .mini{cursor:pointer;translate:calc(var(--mx,0) * 28px) calc(var(--my,0) * 28px);transition:translate .4s ease-out,scale .25s ease}
+.vitrine .mini:hover{scale:1.15}
+.vitrine .pop{animation:pop .5s ease}
+@keyframes pop{0%{scale:1}40%{scale:1.08}100%{scale:1}}
+.pontos{position:absolute;left:50%;bottom:-2.3rem;translate:-50% 0;display:flex;gap:.6rem}
+.pontos button{width:12px;height:12px;border-radius:50%;border:0;padding:0;background:rgba(91,26,46,.28);cursor:pointer;transition:background .25s,scale .25s}
+.pontos button.on{background:var(--vinho);scale:1.4}
+.hero h1 .pal{transition:translate .25s ease,color .25s}
+.hero h1 .pal:hover{translate:0 -10px;color:var(--vermelho)}
 a.wa:active{transform:scale(.97)}
 a.wa svg{width:1.3em;height:1.3em;fill:currentColor;flex:none;transform-origin:50% 60%;animation:balanca 4s ease-in-out infinite}
 @keyframes pulsa{0%{box-shadow:0 0 0 0 rgba(37,211,102,.6)}70%{box-shadow:0 0 0 14px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
 @keyframes balanca{0%,78%,100%{transform:rotate(0)}83%{transform:rotate(-14deg)}88%{transform:rotate(12deg)}93%{transform:rotate(-8deg)}}
-@media (prefers-reduced-motion:reduce){a.wa,a.wa svg{animation:none}}
-@media (prefers-reduced-motion:reduce){.vitrine .m1,.vitrine .m2{animation:none}.rv{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}}
 @media (max-width:820px){.form{grid-template-columns:1fr}}
 
 @media (max-width:820px){
@@ -172,9 +211,9 @@ a.wa svg{width:1.3em;height:1.3em;fill:currentColor;flex:none;transform-origin:5
       </div>
       <div class="vitrine">
         <div class="sol"></div>
-        <div class="principal"><img src="bolo-monster-high.jpg" alt="Bolo rosa com bicos azuis e topo personalizado" width="821" height="844"></div>
-        <div class="mini m1"><img src="doces-e-salgados.jpg" alt="Coxinhas e brigadeiros em caixas" width="833" height="862"></div>
-        <div class="mini m2"><img src="bolo-minnie.jpg" alt="Bolo da Minnie com bicos vermelhos" width="851" height="856"></div>
+        <div class="principal" data-roda="3800"><img class="on" src="bolo-monster-high.jpg" alt="Bolo rosa com bicos azuis e topo personalizado" width="821" height="844"><img src="bolo-peppa-pig.jpg" alt="" width="685" height="847"><img src="bolo-moana.jpg" alt="" width="710" height="856"><img src="bolo-fundo-do-mar.jpg" alt="" width="825" height="842"><img src="bolo-one-piece.jpg" alt="" width="793" height="747"></div>
+        <div class="mini m1" data-roda="4400"><img class="on" src="doces-e-salgados.jpg" alt="Coxinhas e brigadeiros em caixas" width="833" height="862"><img src="bolo-corinthians.jpg" alt="" width="826" height="844"><img src="bolo-free-fire.jpg" alt="" width="598" height="643"></div>
+        <div class="mini m2" data-roda="5000"><img class="on" src="bolo-minnie.jpg" alt="Bolo da Minnie com bicos vermelhos" width="851" height="856"><img src="bolo-call-of-duty.jpg" alt="" width="812" height="862"><img src="bolo-wandinha.jpg" alt="" width="789" height="847"></div>
       </div>
     </div>
   </section>
@@ -191,6 +230,11 @@ a.wa svg{width:1.3em;height:1.3em;fill:currentColor;flex:none;transform-origin:5
         <figure><img src="bolo-monster-high.jpg" alt="Bolo Monster High com topo de personagens" width="821" height="844" loading="lazy"><figcaption>Bolo Monster High</figcaption></figure>
         <figure><img src="doces-e-salgados.jpg" alt="Bolo, brigadeiros e salgados em mesa de festa" width="833" height="862" loading="lazy"><figcaption>Mesa com bolo, brigadeiros e salgados</figcaption></figure>
         <figure><img src="bolo-call-of-duty.jpg" alt="Bolo verde com tema Call of Duty" width="812" height="862" loading="lazy"><figcaption>Bolo Call of Duty</figcaption></figure>
+        <figure><img src="bolo-wandinha.jpg" alt="Bolo preto e cinza com tema Wandinha e topo personalizado" width="789" height="847" loading="lazy"><figcaption>Bolo Wandinha</figcaption></figure>
+        <figure><img src="bolo-peppa-pig.jpg" alt="Bolo rosa com tema Peppa Pig e topo personalizado" width="685" height="847" loading="lazy"><figcaption>Bolo Peppa Pig</figcaption></figure>
+        <figure><img src="bolo-free-fire.jpg" alt="Bolo verde com tema Free Fire e topo personalizado" width="598" height="643" loading="lazy"><figcaption>Bolo Free Fire</figcaption></figure>
+        <figure><img src="bolo-moana.jpg" alt="Bolo colorido com tema Moana e topo personalizado" width="710" height="856" loading="lazy"><figcaption>Bolo Moana</figcaption></figure>
+        <figure><img src="bolo-one-piece.jpg" alt="Bolo azul com tema One Piece e topo personalizado" width="793" height="747" loading="lazy"><figcaption>Bolo One Piece</figcaption></figure>
       </div>
     </div>
   </section>
@@ -254,6 +298,52 @@ a.wa svg{width:1.3em;height:1.3em;fill:currentColor;flex:none;transform-origin:5
 const FONE = "5513996202241";
 
 document.querySelectorAll('a[href*="wa.me"]').forEach(a => a.href = a.href.replace("55DDDNUMERO", FONE));
+
+// Topo: título aparece palavra por palavra
+document.querySelectorAll(".hero h1").forEach(h => {
+  h.innerHTML = h.textContent.trim().split(/\s+/).map((w, i) => `<span class="pal" style="--i:${i}">${w}</span>`).join(" ");
+});
+
+// Topo: fotos trocam sozinhas, com clique e bolinhas
+const pontos = document.createElement("div"); pontos.className = "pontos";
+document.querySelector(".vitrine").appendChild(pontos);
+document.querySelectorAll(".vitrine [data-roda]").forEach((box, k) => {
+  const fs = [...box.querySelectorAll("img")];
+  if (fs.length < 2) return;
+  let i = 0, t;
+  const dots = box.classList.contains("principal") ? fs.map((_, n) => {
+    const b = document.createElement("button"); b.setAttribute("aria-label", "Foto " + (n + 1));
+    b.onclick = e => { e.stopPropagation(); ir(n, true); }; pontos.appendChild(b); return b;
+  }) : [];
+  function ir(n, manual) {
+    fs[i].classList.remove("on"); i = n % fs.length; fs[i].classList.add("on");
+    dots.forEach((d, j) => d.classList.toggle("on", j === i));
+    if (manual) { box.classList.remove("pop"); void box.offsetWidth; box.classList.add("pop"); inicia(); }
+  }
+  function inicia() { clearInterval(t); t = setInterval(() => ir(i + 1), +box.dataset.roda); }
+  box.addEventListener("click", () => ir(i + 1, true));
+  ir(0); setTimeout(inicia, k * 1100);
+});
+
+// Topo: granulado caindo e movimento acompanhando o mouse
+const hero = document.querySelector(".hero");
+const chuva = document.createElement("div"); chuva.className = "granulado";
+const cores = ["#5B1A2E", "#E4474B", "#7DB9C6", "#F28BB1", "#F5B62E"];
+for (let n = 0; n < 24; n++) {
+  const s = document.createElement("i");
+  s.style.left = Math.random() * 100 + "%";
+  s.style.background = cores[n % cores.length];
+  s.style.animationDuration = 7 + Math.random() * 7 + "s";
+  s.style.animationDelay = -Math.random() * 12 + "s";
+  chuva.appendChild(s);
+}
+hero.prepend(chuva);
+hero.addEventListener("pointermove", e => {
+  const r = hero.getBoundingClientRect();
+  hero.style.setProperty("--mx", ((e.clientX - r.left) / r.width - .5) * 2);
+  hero.style.setProperty("--my", ((e.clientY - r.top) / r.height - .5) * 2);
+});
+hero.addEventListener("pointerleave", () => { hero.style.setProperty("--mx", 0); hero.style.setProperty("--my", 0); });
 
 // Cabeçalho com sombra ao rolar
 const topo = document.querySelector(".topo");
